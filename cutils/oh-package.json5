@@ -1,7 +1,7 @@
 {
   "name": "cutils",
   "version": "1.0.0",
-  "description": "Please describe the basic information.",
+  "description": "A tool har for Harmony.",
   "main": "Index.ets",
   "author": "xbd",
   "license": "Apache-2.0",
