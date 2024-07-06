@@ -1,7 +1,13 @@
+import { LogUtils } from 'utils'
+
 @Entry
 @Component
 struct Index {
   @State message: string = 'Hello World'
+
+  aboutToAppear(): void {
+    LogUtils.debug('Index', 'aboutToAppear')
+  }
 
   build() {
     Row() {
