@@ -2,9 +2,7 @@ import CryptoJS from '@ohos/crypto-js';
 import { LogUtils } from './LogUtils';
 
 const TAG = 'CryptoUtils'
-export  function  ab(){
 
-}
 export class CryptoUtils {
   static cryptoECB(text: string, aesKey: string, showLog: boolean = false): string {
     let keyParse: string = CryptoJS.enc.Utf8.parse(aesKey)

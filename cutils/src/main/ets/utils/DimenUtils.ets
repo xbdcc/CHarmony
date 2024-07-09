@@ -1,5 +1,4 @@
 import display from '@ohos.display';
-import { CUtils } from '../CUtils';
 import { LogUtils } from './LogUtils';
 
 const DESIGN_WIDTH = 1920;
@@ -7,6 +6,15 @@ const DESIGN_HEIGHT = 1080;
 
 const TAG = 'DimenUtils'
 
+/**
+ * 平板模拟器
+ * deviceDisplay.width 2560
+ * densityPixels 2.25
+ *
+ * 真机
+ * deviceDisplay.width 1280
+ * densityPixels 1.5
+ */
 export class DimenUtils {
   static getVp(designPx: number): number {
     return DimenUtils.getVpFromPx(designPx)

@@ -4,7 +4,7 @@
 封装的鸿蒙工具类相关
 
 ## 安装命令
-`ohpm install cutils`
+`ohpm install utils`
 
 
 ## 相关介绍
