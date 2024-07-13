@@ -1,9 +1,24 @@
 import CryptoJS from '@ohos/crypto-js';
 import { LogUtils } from './LogUtils';
+import { util } from '@kit.ArkTS';
 
 const TAG = 'CryptoUtils'
 
 export class CryptoUtils {
+
+  static base64FromArray(arrays: Uint8Array) : string{
+    let textDecoder =  util.TextDecoder.create()
+    let result: string = textDecoder.decodeWithStream( arrays );
+    return CryptoUtils.base64FromString(result)
+  }
+
+  static base64FromString(encodeString: string) : string{
+    let base64Helper = new util.Base64Helper();
+    let decodeArray = base64Helper.decodeSync(encodeString)
+    let result = new util.TextDecoder().decodeWithStream(decodeArray)
+    return result
+  }
+
   static cryptoECB(text: string, aesKey: string, showLog: boolean = false): string {
     let keyParse: string = CryptoJS.enc.Utf8.parse(aesKey)
     // hex形式的加密结果
