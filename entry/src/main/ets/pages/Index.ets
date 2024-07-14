@@ -1,4 +1,5 @@
-import { LogUtils } from 'utils'
+import { RouterPath } from '../router/RouterPath'
+import { replaceUrl } from '../utils/RouterUtils'
 
 @Entry
 @Component
@@ -6,7 +7,7 @@ struct Index {
   @State message: string = 'Hello World'
 
   aboutToAppear(): void {
-    LogUtils.debug('Index', 'aboutToAppear')
+    replaceUrl(RouterPath.YspPage)
   }
 
   build() {
