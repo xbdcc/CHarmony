@@ -8,7 +8,7 @@
   "dependencies": {
     "utils": "file:./../cutils/build/default/outputs/default/cutils.har",
 //    "utils": "1.0.4"
-    "@ohos/axios": "2.2.1-rc.2"
+    "@ohos/axios": "2.2.2"
   }
 }
 
