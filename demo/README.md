@@ -83,13 +83,30 @@ product：对应App的多目标产物。一个HarmonyOS工程的构建产物为A
 
 
 ### 更多实践
-#### 代码资源目录
+#### 自定义代码资源目录及自定义参数
 ```
     {
       "name": "free",
       "runtimeOS": "HarmonyOS",
+      "config": {
+        "buildOption": {
+          "arkOptions": {
+            "buildProfileFields": {
+              "buildData": "free"
+            }
+          }
+        }
+      },
       "source": {
-        "sourceRoots": ["./src/free"]
+        "sourceRoots": [
+          "./src/free"
+        ]
+      },
+      "resource": {
+        "directories": [
+          "./src/main/resources",
+          "./src/main/resource_free"
+        ]
       },
       "output": {
         "artifactName": "free"
@@ -98,8 +115,25 @@ product：对应App的多目标产物。一个HarmonyOS工程的构建产物为A
     {
       "name": "pay",
       "runtimeOS": "OpenHarmony",
+      "config": {
+        "buildOption": {
+          "arkOptions": {
+            "buildProfileFields": {
+              "buildData": "pay"
+            }
+          }
+        }
+      },
       "source": {
-        "sourceRoots": ["./src/pay"]
+        "sourceRoots": [
+          "./src/pay"
+        ]
+      },
+      "resource": {
+        "directories": [
+          "./src/main/resources",
+          "./src/main/resource_pay"
+        ]
       },
       "output": {
         "artifactName": "pay"
