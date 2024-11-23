@@ -6,7 +6,18 @@
         "name": "default",
         "signingConfig": "default",
         "compatibleSdkVersion": "5.0.0(12)",
-        "runtimeOS": "HarmonyOS"
+        "runtimeOS": "HarmonyOS",
+      },
+      {
+        "name": "Community",
+        "runtimeOS": "HarmonyOS",
+        "compatibleSdkVersion": "5.0.0(12)"
+      },
+      {
+        "name": "Business",
+        "runtimeOS": "OpenHarmony",
+        "compileSdkVersion": 11,
+        "compatibleSdkVersion": 11
       }
     ]
   },
@@ -26,6 +37,30 @@
     {
       "name": "cutils",
       "srcPath": "./cutils",
-    }
+    },
+    {
+      "name": "demo",
+      "srcPath": "./demo",
+      "targets": [
+        {
+          "name": "default",
+          "applyToProducts": [
+            "default"
+          ]
+        },
+        {
+          "name": "free",
+          "applyToProducts": [
+            "Community"
+          ]
+        },
+        {
+          "name": "pay",
+          "applyToProducts": [
+            "Business"
+          ]
+        }
+      ]
+    },
   ]
 }

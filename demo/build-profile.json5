@@ -1,0 +1,62 @@
+{
+  "apiType": "stageMode",
+  "buildOption": {
+  },
+  "buildOptionSet": [
+    {
+      "name": "release",
+      "arkOptions": {
+        "obfuscation": {
+          "ruleOptions": {
+            "enable": false,
+            "files": [
+              "./obfuscation-rules.txt"
+            ]
+          }
+        }
+      }
+    },
+  ],
+  "targets": [
+    {
+      "name": "default"
+    },
+    {
+      "name": "ohosTest",
+    },
+    {
+      "name": "free",
+      "runtimeOS": "HarmonyOS",
+      "config": {"buildOption": {"arkOptions": {"buildProfileFields": {
+        "buildData": "free"
+      }}}},
+      "source": {
+        "sourceRoots": ["./src/free"]
+      },
+      "resource": {"directories": [
+        "./src/main/resources",
+        "./src/main/resource_free"
+      ]},
+      "output": {
+        "artifactName": "free"
+      }
+    },
+    {
+      "name": "pay",
+      "runtimeOS": "OpenHarmony",
+      "config": {"buildOption": {"arkOptions": {"buildProfileFields": {
+        "buildData": "pay"
+      }}}},
+      "source": {
+        "sourceRoots": ["./src/pay"]
+      },
+      "resource": {"directories": [
+        "./src/main/resources",
+        "./src/main/resource_pay"
+      ]},
+      "output": {
+        "artifactName": "pay"
+      }
+    }
+  ]
+}
