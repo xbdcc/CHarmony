@@ -5,14 +5,13 @@ import { util } from '@kit.ArkTS';
 const TAG = 'CryptoUtils'
 
 export class CryptoUtils {
-
-  static base64FromArray(arrays: Uint8Array) : string{
-    let textDecoder =  util.TextDecoder.create()
-    let result: string = textDecoder.decodeWithStream( arrays );
+  static base64FromArray(arrays: Uint8Array): string {
+    let textDecoder = util.TextDecoder.create()
+    let result: string = textDecoder.decodeWithStream(arrays);
     return CryptoUtils.base64FromString(result)
   }
 
-  static base64FromString(encodeString: string) : string{
+  static base64FromString(encodeString: string): string {
     let base64Helper = new util.Base64Helper();
     let decodeArray = base64Helper.decodeSync(encodeString)
     let result = new util.TextDecoder().decodeWithStream(decodeArray)
@@ -50,5 +49,9 @@ export class CryptoUtils {
       LogUtils.debug(TAG, 'data:' + data)
     }
     return data
+  }
+
+  static md5(text: string): string {
+    return CryptoJS.MD5(text).toString()
   }
 }

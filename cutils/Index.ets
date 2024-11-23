@@ -5,4 +5,5 @@ export { TextModifier } from './src/main/ets/components/modifers/TextModifier'
 export { DimenUtils } from './src/main/ets/utils/DimenUtils'
 export { ToastUtils } from './src/main/ets/utils/ToastUtils'
 export { RouterUtils } from './src/main/ets/utils/RouterUtils'
+export { JsonUtils } from './src/main/ets/utils/JsonUtils'
 
