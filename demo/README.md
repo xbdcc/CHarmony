@@ -38,7 +38,6 @@ product：对应App的多目标产物。一个HarmonyOS工程的构建产物为A
 ![Product截图](../xbd/images/demo/product_target_screen1.png)
 
 
-
 那么假如现在有个需求，当前社区版我们想跑在`HarmonyOS`的机器上，但是商用还是`OpenHarmony`上，需要出不同的包怎么实现呢？
 如果当我们没有了解多产物目标方案时，最传统的可能就是注释`default`下的环境替换了，或者通过`hvigorfile`脚本编译替换，
 而当了解了多产物则比较好实现，我们在不同的product中可以配置不同的编译环境，如`Business`改为:
@@ -140,30 +139,17 @@ product：对应App的多目标产物。一个HarmonyOS工程的构建产物为A
       }
     }
 ```
-在`main`同级目录中创建`free`和`pay`两个文件夹，在`main`中`ets`下创建`component`文件夹，其中再创建`DemoComponent`组件，代码如下：
+在`main`同级目录中创建`free`和`pay`两个文件夹，在`main`中`ets`下创建`component`文件夹，其中再创建`DemoComponent`组件，
+在`resource`同级目录创建`reource_free`和`resource_pay`两个资源目录，分别放入不同图片命名为`product_target_screen`,
+`DemoComponent`组件代码示例如下：
 ```
 @Component
 export struct DemoComponent {
   build() {
-    Text('This is free')
-  }
-}
-```
-`free`创建相同目录和文件，代码如下：
-```
-@Component
-export struct DemoComponent {
-  build() {
-    Text('This is free')
-  }
-}
-```
-`pay`创建相同目录和文件，代码如下：
-```
-@Component
-export struct DemoComponent {
-  build() {
-    Text('This is pay')
+    Text('The custom build data is:' + BuildProfile.buildData)
+      .backgroundImage($r('app.media.product_target_screen'))
+      .width('100%')
+      .height('100%')
   }
 }
 ```
@@ -171,7 +157,9 @@ export struct DemoComponent {
 ```
 import { DemoComponent } from 'demo/ets/component/DemoComponent';
 ```
-
+此时切换不同的`target`查看`Previewer`，可以看到文本和图片显示不一样了：
+![Product截图](../xbd/images/demo/product_target_screen3.png)
+![Product截图](../xbd/images/demo/product_target_screen4.png)
 
 ### 通过脚本移除三方库依赖
 假如我们想社区版带开源库，商业版不集成三方库，这时我们可以通过`hvigor`脚本在编译时移除商业版的依赖。
@@ -200,10 +188,6 @@ export default {
   plugins:[]         /* Custom plugin to extend the functionality of Hvigor. */
 }
 ```
-
-### 代码资源多路径
-
-
 
 
 
