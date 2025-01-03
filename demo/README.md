@@ -17,8 +17,11 @@ product：对应App的多目标产物。一个HarmonyOS工程的构建产物为A
 不同业务场景：在不同的业务场景中，同一个应用可能需要提供不同的功能或资源。例如，一个在线教育应用可能需要为学生提供学习资料，而为教师提供教学资料。HarmonyOS系统支持通过配置不同的Target来实现这种差异化定制。
 
 1. Community社区版本，免费，向个人开发者用户提供该应用绝大部分基础功能，但是不提供部分定制化限定功能及技术支持。
-
 2. Ultimate终极版本，收费，向个人、政企等开发者用户提供该应用全部基础功能，同时提供定制化限定功能及技术支持。
+
+## 构建原理图
+
+![0000000000011111111.20241129170413.23608438271591770418329495912268:50001231000000:2800:E915552020565F9FCC25988F7923B4F878C0A6B053A05B1029FB1F4CF1B8E08B.png](https://alliance-communityfile-drcn.dbankcdn.com/FileServer/getFile/cmtyPub/011/111/111/0000000000011111111.20241129170413.23608438271591770418329495912268:50001231000000:2800:E915552020565F9FCC25988F7923B4F878C0A6B053A05B1029FB1F4CF1B8E08B.png?needInitFileName=true?needInitFileName=true)
 
 ## 使用
 
@@ -161,7 +164,8 @@ import { DemoComponent } from 'demo/ets/component/DemoComponent';
 ![Product截图](../xbd/images/demo/product_target_screen3.png)
 ![Product截图](../xbd/images/demo/product_target_screen4.png)
 
-### 通过脚本移除三方库依赖
+### `hvigorfile`脚本实践
+#### 通过脚本移除三方库依赖
 假如我们想社区版带开源库，商业版不集成三方库，这时我们可以通过`hvigor`脚本在编译时移除商业版的依赖。
 如模块下的`hvigorfile.ts`文件：
 ```typescript
@@ -189,6 +193,89 @@ export default {
 }
 ```
 
+#### 通过脚本重命名hap包名称
+如果我们想要定制hap包名称,可以在模块下的`build-profile.json5`文件进行修改,对应的`target`节点下添加
+```json
+  "output": {
+        "artifactName": "freehap"
+      }
+```
+但是假如我们想打出来的包不止名称不一样,还想加时间后缀呢,json配置文件中无法动态获取时间,这时我们就可以在模块下的`hvigorfile.ts`中添加如下方法:
+```typescript
+function renameHapName(hapContext: OhosHapContext) {
+  const buildProfile = hapContext.getBuildProfileOpt();
+  const targets = buildProfile.targets
+  for (const target of targets) {
+    console.log('target:' + target);
+    target['output']={
+      "artifactName": 'FunHarmonyLauncher_' + target.name + '_'+ getTime()
+    }
+  }
+  hapContext.setBuildProfileOpt(buildProfile);
+}
+```
+读取配置文件,获取output节点,对其中对artifactName字段自定义赋值,`getTime()`方法便可以自定义获取时间
+
+#### 通过脚本动态修改权限
+```typescript
+function changePermissions(hapContext: OhosHapContext) {
+  hapContext.targets((target: Target)=> {
+    const targetName = target.getTargetName();
+    console.log(targetName);
+    if('free' == targetName){
+      // 通过上下文对象获取从module.json5文件中读出来的obj对象
+      const moduleJsonOpt = hapContext.getModuleJsonOpt();
+      moduleJsonOpt['module']['requestPermissions'] = [
+        {
+          "name": "ohos.permission.INTERNET"
+        }
+      ]
+      hapContext.setModuleJsonOpt(moduleJsonOpt)
+    }
+  })
+}
+```
+
+#### 通过脚本动态修改hap包桌面显示名称,图标
+直接通过脚本修改`app.json5`中不生效,实际需要修改`EntryAbility`中的属性,先在`string.json`中添加`EntryAbility_label_free`字段,
+然后再在上面动态修改权限遍历target判断targetName后添加如下配置:
+```typescript
+      let abilities = moduleJsonOpt['module']['abilities']
+      for (let abilitiesElement of abilities) {
+        abilitiesElement['label'] = "$string:EntryAbility_label_free"
+        abilitiesElement['icon'] = "$media:icon_free"
+      }
+```
+
+#### 通过脚本动态配置签名
+在工程的`build-profile.json5`文件中,我们可以在`signingConfigs`节点下添加其他不同的签名配置,然后在product节点下配置对应的签名配置.
+但是如果我们想在同一个`product`下针对不同的`target`生成不同签名的hap包呢,这种方式就可以通过脚本动态配置了,我们判断在编译当前target的时候,
+修改`product`中的`signingConfig`为指定的签名配置名称:
+```typescript
+function reSign(appContext: OhosAppContext, signName) {
+  // 获取外部参数
+  const exitParams = hvigor.getParameter().getExtParams();
+  const module = exitParams['module']; 
+  if (!module) return
+  if (module.includes('vip') ) {
+    const buildProfileOpt = appContext.getBuildProfileOpt();
+    const products = buildProfileOpt.app.products
+    for (const product of products) {
+      product['signingConfig']= signName
+    }
+    appContext.setBuildProfileOpt(buildProfileOpt);
+  }
+}
+```
+
+#### 通过脚本动态修改包名
+```typescript
+function changePackageName(appContext: OhosAppContext, packageName) {
+  const appJson5: AppJson.AppOptObj = appContext.getAppJsonOpt();
+  appJson5.app.bundleName = packageName
+  appContext.setAppJsonOpt(appJson5);
+}
+```
 
 
 ## 参考资料
